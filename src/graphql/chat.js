@@ -39,7 +39,6 @@ export const typeDefs = gql`
 `;
 
 export const resolvers = {
- 
   Query: {
     chat: (root, args, ctx) => {
       authCheck(ctx);
@@ -49,14 +48,13 @@ export const resolvers = {
     chats: (root, args, ctx) => {
       authCheck(ctx);
       const { limit, offset } = args;
-      return ChatsService.find({ _id: ctx.user.chatsId, productId: '123' }, { limit, offset });
+      return ChatsService.find({ _id: ctx.user.chatsId }, { limit, offset });
     },
   },
 
   Mutation: {
     addMessage: (root, args, ctx) => {
       authCheck(ctx);
-      console.log('@');
       return ChatsService.addMessage({
         createdBy: ctx.user._id,
         chatId: args.chatId,

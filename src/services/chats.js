@@ -7,7 +7,8 @@ class ChatsService {
   async create({ createdBy, productId, productOwnerId }) {
     const chat = await ChatModel.create({ createdBy, productId, productOwnerId });
     const user = await UserModel.findUserById(createdBy);
-    const chatsId = [chat._id, ...user.chatsId];
+    const { _id } = chat;
+    const chatsId = [_id, ...user.chatsId];
     UserModel.update(createdBy, { chatsId });
     return chat;
   }

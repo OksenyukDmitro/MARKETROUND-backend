@@ -16,9 +16,23 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    addProduct(description: String!, location: String!, price: Int!): Product!
+    addProduct(input: CreateProductInput!): Product!
     deleteProduct(productId: ID!): Boolean
-    updateProduct(productId: ID!, body: String!): Product!
+    updateProduct(input: UpdateProductInput): Product!
+  }
+
+  input CreateProductInput {
+    description: String!
+    location: String!
+    price: Float!
+    category: Category!
+    images: [ProductImage]
+  }
+
+  input UpdateProductInput {
+    productId: ID!
+    body: String!
+    status: Status!
   }
 
   type Product {
