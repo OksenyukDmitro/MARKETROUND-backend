@@ -9,8 +9,12 @@ const MessageSchema = new mongoose.Schema(
         body: {
             type: String,
             required: [true, 'Please enter a body'],
+        },       
+        createdBy: {
+            type: String,
+            required: [true, 'Please enter a createdBy'],
         },
-
+        createdAt: { type: Date, default: Date.now },
 
     },
     { timestamps: true },
@@ -28,5 +32,6 @@ MessageSchema.statics.findByQuery = function findByQuery(query, options) {
 };
 
  
+const MessageModel = mongoose.model('Message', MessageSchema);
 
-export default MessageSchema;
+export default MessageModel;

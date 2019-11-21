@@ -1,19 +1,9 @@
 /* eslint-disable class-methods-use-this */
+import mongoose from 'mongoose';
 import ChatModel from '../models/chat';
 import UserModel from './auth';
-import mongoose from 'mongoose';
+import MessageModel from '../models/message'
 
-const createMessage = (chatId, body, createdBy) => {
-    const _id = new mongoose.Types.ObjectId()
-    return {
-        _id,
-        chatId,
-        body,
-        createdBy,
-        createdAt: Date.now(),
-
-    };
-}
 class ChatsService {
     async create({ createdBy, productId, productOwnerId }) {
         const chat = await ChatModel.create({ createdBy, productId, productOwnerId });
@@ -23,11 +13,8 @@ class ChatsService {
         return chat;
     }
     async addMessage({ chatId, body, createdBy }) {
-        console.log("1")
         const chat = await this.findByChatId(chatId);
-
-        const message = createMessage(chatId, body, createdBy)
-        console.log(message)
+        const message = MessageModel.create({ chatId, body, createdBy })
         const messages = [message, ...chat.messages]
         this.update(chatId, { messages })
         return messages
