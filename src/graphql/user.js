@@ -53,8 +53,6 @@ export const typeDefs = gql`
     creator: User!
   }
 
-
-
   type User {
     _id: ID!
     username: String!

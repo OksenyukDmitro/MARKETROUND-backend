@@ -63,12 +63,14 @@ class Users {
     const user = await UserModel.findById(_id);
     return user;
   }
+
   async update(_id, modifier) {
     // TODO: validate
     await UserModel.updateOne({ _id }, { $set: { ...modifier } });
     const user = await UserModel.findById(_id);
     return user;
   }
+
   async changePassword(user, password, newPassword) {
     const { _id, password: currentPassword } = user;
     const exists = !!UserModel.findById(_id);

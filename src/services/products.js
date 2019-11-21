@@ -14,6 +14,7 @@ class ProductsService {
   findByUserId(_id, options) {
     return ProductModel.findByUserId(_id, options);
   }
+
   findByProductId(_id) {
     return ProductModel.findByProductId(_id);
   }

@@ -23,8 +23,7 @@ ProductSchema.statics.findByUserId = function findPostByUserId(userId, options) 
   return this.findByQuery({ createdBy: userId }, options);
 };
 ProductSchema.statics.findByProductId = function findProductByProductId(_id) {
-  return this.findOne({ _id })
-
+  return this.findOne({ _id });
 };
 
 ProductSchema.statics.findByQuery = function findByQuery(query, options) {

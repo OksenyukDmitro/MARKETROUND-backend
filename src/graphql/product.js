@@ -4,8 +4,7 @@ import ProductsService from '../services/products';
 import { authCheck } from './utils';
 
 export const typeDefs = gql`
-
-enum Status {
+  enum Status {
     DRAFT
     PUBLISHED
     CLOSED
@@ -17,12 +16,11 @@ enum Status {
   }
 
   extend type Mutation {
-    addProduct(description: String! location: String! price: Int!): Product!
+    addProduct(description: String!, location: String!, price: Int!): Product!
     deleteProduct(productId: ID!): Boolean
     updateProduct(productId: ID!, body: String!): Product!
   }
 
-  
   type Product {
     _id: ID!
     location: String
@@ -31,19 +29,19 @@ enum Status {
     category: Category!
     categoryId: ID!
     creatorId: ID!
-    description: String!   
+    description: String!
     images: [ProductImage]
     status: Status!
   }
   type ProductImage {
-  url: String!
-}
+    url: String!
+  }
 
   type Category {
     _id: ID!
     name: ID!
     products: [Product]!
-  }  
+  }
 `;
 
 export const resolvers = {
@@ -61,16 +59,18 @@ export const resolvers = {
     product: async (root, args, ctx) => {
       authCheck(ctx);
       const { productId } = args;
-      const product = await ProductsService.findByProductId(productId)
-      return product
+      const product = await ProductsService.findByProductId(productId);
+      return product;
     },
   },
   Mutation: {
     addProduct: (root, args, ctx) => {
       authCheck(ctx);
       return ProductsService.add({
-        createdBy: ctx.user._id, description: args.description,
-        location: args.location, price: args.price
+        createdBy: ctx.user._id,
+        description: args.description,
+        location: args.location,
+        price: args.price,
       });
     },
     deleteProduct: (root, args, ctx) => {
