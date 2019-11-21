@@ -25,14 +25,20 @@ export const typeDefs = gql`
     description: String!
     location: String!
     price: Float!
-    category: Category!
-    images: [ProductImage]
+    category: CategoryInput!
+    images: [ProductImageInput]
   }
 
   input UpdateProductInput {
     productId: ID!
     body: String!
     status: Status!
+  }
+  input CategoryInput {
+    name: ID!
+  }
+  input ProductImageInput {
+    url: String!
   }
 
   type Product {
