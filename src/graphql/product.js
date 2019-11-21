@@ -4,6 +4,12 @@ import ProductsService from '../services/products';
 import { authCheck } from './utils';
 
 export const typeDefs = gql`
+
+enum Status {
+    DRAFT
+    PUBLISHED
+    CLOSED
+  }
   extend type Query {
     products(offset: Int!, limit: Int!): [Product]!
     myProducts(offset: Int!, limit: Int!): [Product]!
@@ -16,17 +22,28 @@ export const typeDefs = gql`
     updateProduct(productId: ID!, body: String!): Product!
   }
 
-  type Product {
-    _id: ID!    
-    location: String
-    price: Int!
-    createdAt: String!  
-    category: String  
-    creatorId: ID!  
-    description: String!    
-  }
-
   
+  type Product {
+    _id: ID!
+    location: String
+    price: Float!
+    createdAt: String!
+    category: Category!
+    categoryId: ID!
+    creatorId: ID!
+    description: String!   
+    images: [ProductImage]
+    status: Status!
+  }
+  type ProductImage {
+  url: String!
+}
+
+  type Category {
+    _id: ID!
+    name: ID!
+    products: [Product]!
+  }  
 `;
 
 export const resolvers = {
@@ -44,7 +61,7 @@ export const resolvers = {
     product: async (root, args, ctx) => {
       authCheck(ctx);
       const { productId } = args;
-      const product = await ProductsService.findByProductId(productId)      
+      const product = await ProductsService.findByProductId(productId)
       return product
     },
   },

@@ -16,59 +16,66 @@ export const typeDefs = gql`
   }
 
   type Chat {
-    _id: ID!    
-    productId: ID!,
-    messages: [Message] 
+    _id: ID!
+    productId: ID!
+    product: Product!
+    messages: [Message]
     createdAt: String!
-    productOwnerId:  ID!
-    createdBy:  ID!
+    createdBy: ID!
+    unreadMessagesCount: Int!
+    lastMessage: Message
+    interlocutor: User!
   }
+
   type Message {
-    chatId: String!
-    _id: ID!    
+    chatId: ID!
+    _id: ID!
     createdAt: String!
     body: String!
-  }  
+    incoming: Boolean!
+    creator: User!
+    createdBy: ID!
+  }
 `;
 
 export const resolvers = {
 
-    Query: {
-        chat: (root, args, ctx) => {
-            authCheck(ctx);
-            const { chatId } = args;
-            return ChatsService.findByChatId(chatId);
-        },
-
-    },
-    Query: {
-        chats: (root, args, ctx) => {
-
-            authCheck(ctx);
-            const { limit, offset } = args;
-            return ChatsService.find({ _id: ctx.user.chatsId, productId: "123" }, { limit, offset });
-        },
+  Query: {
+    chat: (root, args, ctx) => {
+      authCheck(ctx);
+      const { chatId } = args;
+      return ChatsService.findByChatId(chatId);
     },
 
-    Mutation: {
-        addMessage: (root, args, ctx) => {
-            authCheck(ctx);
-            console.log("@")
-            return ChatsService.addMessage({
-                createdBy: ctx.user._id, chatId: args.chatId, body: args.body,
-            });
-        },
-        createChat: async (root, args, ctx) => {
+  },
+  Query: {
+    chats: (root, args, ctx) => {
 
-            authCheck(ctx);
-            const { createdBy } = await ProductsService.findByProductId(args.productId)
-
-            return ChatsService.create({
-                createdBy: ctx.user._id, productId: args.productId,
-                productOwnerId: createdBy
-            });
-        },
-
+      authCheck(ctx);
+      const { limit, offset } = args;
+      return ChatsService.find({ _id: ctx.user.chatsId, productId: "123" }, { limit, offset });
     },
-    // TODO: implement
+  },
+
+  Mutation: {
+    addMessage: (root, args, ctx) => {
+      authCheck(ctx);
+      console.log("@")
+      return ChatsService.addMessage({
+        createdBy: ctx.user._id, chatId: args.chatId, body: args.body,
+      });
+    },
+    createChat: async (root, args, ctx) => {
+
+      authCheck(ctx);
+      const { createdBy } = await ProductsService.findByProductId(args.productId)
+
+      return ChatsService.create({
+        createdBy: ctx.user._id, productId: args.productId,
+        productOwnerId: createdBy
+      });
+    },
+
+  },
+  // TODO: implement
 };

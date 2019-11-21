@@ -1,5 +1,4 @@
 /* eslint-disable class-methods-use-this */
-import mongoose from 'mongoose';
 import ChatModel from '../models/chat';
 import UserModel from './auth';
 import MessageModel from '../models/message'
