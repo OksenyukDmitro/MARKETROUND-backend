@@ -50,7 +50,7 @@ export const typeDefs = gql`
   }
 
   extend type Product {
-    creator: User!
+    creator: User
   }
 
   type User {
@@ -69,9 +69,6 @@ export const typeDefs = gql`
 `;
 
 export const resolvers = {
-  Product: {
-    creator: ({ createdBy }) => AuthService.findUserById(createdBy),
-  },
   Query: {
     me: (root, args, context) => context.user,
     user: (root, args) => AuthService.findUserByUsername(args.username),

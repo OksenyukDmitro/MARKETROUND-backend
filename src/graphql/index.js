@@ -1,4 +1,5 @@
 import { ApolloServer } from 'apollo-server';
+
 import schema from './schema';
 import logger from '../utils/logger';
 import UserModel from '../models/user';
