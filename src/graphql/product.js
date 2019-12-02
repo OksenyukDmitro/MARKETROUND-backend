@@ -12,6 +12,7 @@ const randomArray = (min, max, callback) => {
 const products = () => ({
   _id: faker.random.uuid(),
   location: faker.address.city(),
+  title: faker.random.words(),
   price: faker.commerce.price(),
   createdAt: faker.date.past(),
   categoryId: faker.random.uuid(),
@@ -20,9 +21,15 @@ const products = () => ({
   category: {
     name: faker.random.words(),
   },
+  images: [
+    {
+      url: faker.random.image(),
+    },
+  ],
   creator: {
     _id: faker.random.uuid(),
     username: faker.random.word(),
+
     profile: {
       firstName: faker.random.word(),
       lastName: faker.random.word(),
@@ -71,6 +78,7 @@ export const typeDefs = gql`
 
   type Product {
     _id: ID!
+    title: String!
     location: String
     price: Float!
     createdAt: String!
