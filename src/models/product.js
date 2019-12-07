@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 const ProductSchema = new mongoose.Schema(
   {
+    title: {
+      type: String,
+      required: [true, 'Please enter a title'],
+    },
     description: {
       type: String,
       required: [true, 'Please enter a description'],
@@ -10,6 +14,12 @@ const ProductSchema = new mongoose.Schema(
     location: {
       type: String,
       required: [true, 'Please enter a location'],
+    },
+    category: {
+      name: {
+        type: String,
+        required: [true, 'Please enter a category'],
+      },
     },
     price: {
       type: Number,

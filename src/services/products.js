@@ -2,9 +2,9 @@
 import ProductModel from '../models/product';
 
 class ProductsService {
-  add({ createdBy, description, location, price }) {
+  add({ createdBy, description, location, price, category, title }) {
     // TODO: validate
-    return ProductModel.create({ createdBy, description, location, price });
+    return ProductModel.create({ createdBy, description, location, price, category, title });
   }
 
   find(query = {}, options) {

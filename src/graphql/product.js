@@ -22,6 +22,7 @@ export const typeDefs = gql`
   }
 
   input CreateProductInput {
+    title: String!
     description: String!
     location: String!
     price: Float!
@@ -88,11 +89,16 @@ export const resolvers = {
   Mutation: {
     addProduct: (root, args, ctx) => {
       authCheck(ctx);
+      const { description, title, location, price, category } = args.input;
       return ProductsService.add({
+        title,
         createdBy: ctx.user._id,
-        description: args.description,
-        location: args.location,
-        price: args.price,
+        description,
+        location,
+        price,
+        category: {
+          name: category.name,
+        },
       });
     },
     deleteProduct: (root, args, ctx) => {
