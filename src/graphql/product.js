@@ -39,7 +39,7 @@ export const typeDefs = gql`
     name: ID!
   }
   input ProductImageInput {
-    url: String!
+    url: [String]!
   }
 
   type Product {
