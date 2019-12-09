@@ -1,4 +1,5 @@
 import faker from 'faker';
+import user from './user';
 
 const product = () => ({
   _id: faker.random.uuid(),
@@ -18,15 +19,6 @@ const product = () => ({
     },
   ],
 
-  creator: {
-    _id: faker.random.uuid(),
-    username: faker.random.word(),
-
-    profile: {
-      firstName: faker.random.word(),
-      lastName: faker.random.word(),
-      avatar: faker.internet.avatar(),
-    },
-  },
+  creator: user(),
 });
 export default product;
