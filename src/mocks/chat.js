@@ -14,7 +14,7 @@ const chat = () => ({
   createdBy: faker.random.uuid(),
   interlocutor: user(),
 
-  messages: Array(Math.floor(Math.random() * 10)).fill(message()),
+  messages: Array(Math.floor(Math.random() * 10)).fill(message),
   lastMessage: message(),
 });
 export default chat;
