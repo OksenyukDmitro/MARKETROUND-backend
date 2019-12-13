@@ -5,15 +5,18 @@ import UserModel from '../models/user';
 import product from '../mocks/product';
 import chat from '../mocks/chat';
 import message from '../mocks/message';
+import user from '../mocks/user';
 
 const mocks = {
   Query: () => ({
     products: () => new MockList(10),
     chats: () => new MockList(Math.floor(Math.random() * 10)),
+    userProducts: () => new MockList(Math.floor(Math.random() * 10)),
   }),
   Product: () => product(),
   Chat: () => chat(),
   Message: () => message(),
+  User: () => user(),
 };
 const getTokenFromReq = req => {
   const header = req.headers.authorization || '';

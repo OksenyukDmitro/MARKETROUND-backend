@@ -11,6 +11,7 @@ export const typeDefs = gql`
   }
   extend type Query {
     products(offset: Int!, limit: Int!): [Product]!
+    userProducts(username: String!, offset: Int!, limit: Int!): [Product]!
     myProducts(offset: Int!, limit: Int!): [Product]!
     product(productId: ID!): Product!
   }
