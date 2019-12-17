@@ -15,6 +15,8 @@ export const typeDefs = gql`
     logout: Boolean
     changePassword(input: ChangePasswordInput!): Boolean
     forgotPassword(username: String!): Boolean
+    addToWish(productId: String!): Boolean
+    removeFromWish(productId: String!): Boolean
   }
 
   input CreateAccountInput {
@@ -59,6 +61,7 @@ export const typeDefs = gql`
     email: String!
     profile: UserProfile!
     chatsId: [String]
+    wish: [String]  
   }
 
   type UserProfile {

@@ -14,6 +14,7 @@ export const typeDefs = gql`
     userProducts(username: String!, offset: Int!, limit: Int!): [Product]!
     myProducts(offset: Int!, limit: Int!): [Product]!
     product(productId: ID!): Product!
+    productsIds(offset: Int!, limit: Int!, ids: [String]!): [Product]!
   }
 
   extend type Mutation {
