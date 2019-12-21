@@ -28,7 +28,7 @@ const server = new ApolloServer({
   introspection: true,
   playground: true,
   schema,
-  mocks,
+  mocks: false,
   mockEntireSchema: true,
   context: async ({ req }) => {
     const token = getTokenFromReq(req);

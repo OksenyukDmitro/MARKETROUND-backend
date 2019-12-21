@@ -121,6 +121,14 @@ export const resolvers = {
       if (nModified > 0) return true;
       return false;
     },
+    addToWish: async (root, args, ctx) => {
+      const { productId } = args;
+      return  await AuthService.addToWish(ctx.user, productId);      
+    },
+    removeFromWish: async (root, args, ctx) => {
+      const { productId } = args;
+      return  await AuthService.removeFromWish(ctx.user, productId);      
+    },
     //     changePassword
     // forgotPassword
   },

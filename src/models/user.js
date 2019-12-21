@@ -17,6 +17,11 @@ const UserSchema = new mongoose.Schema(
       index: true,
       required: [true, 'Please enter a email'],
     },
+    wish: {
+      type: Array,
+      required: [true],
+      default: [],
+    },
     password: {
       type: String,
       required: [true, 'Please enter a password'],

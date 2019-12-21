@@ -4,7 +4,7 @@ import ProductsService from '../services/products';
 import { authCheck } from './utils';
 
 export const typeDefs = gql`
-  enum Status {
+   enum Status {
     DRAFT
     PUBLISHED
     CLOSED
@@ -14,7 +14,7 @@ export const typeDefs = gql`
     userProducts(username: String!, offset: Int!, limit: Int!): [Product]!
     myProducts(offset: Int!, limit: Int!): [Product]!
     product(productId: ID!): Product!
-    productsIds(offset: Int!, limit: Int!, ids: [String]!): [Product]!
+    wishProducts(offset: Int!, limit: Int!): [Product]!
   }
 
   extend type Mutation {
@@ -76,6 +76,16 @@ export const resolvers = {
 
       return ProductsService.find({}, { limit, offset });
     },
+    wishProducts: (root, args, ctx) => {
+      const { limit, offset } = args;
+      authCheck(ctx);
+      const wish = [];
+      ctx.user.wish.forEach(element => {
+        wish.push(ProductsService.findByProductId({ _id: element }, { limit, offset }))
+      });
+      console.log(wish);
+      return wish;
+    },
     myProducts: (root, args, ctx) => {
       authCheck(ctx);
       const { limit, offset } = args;
@@ -94,7 +104,7 @@ export const resolvers = {
       const { description, title, location, price, category } = args.input;
       return ProductsService.add({
         title,
-        createdBy: ctx.user._id,
+        creator: ctx.user,
         description,
         location,
         price,

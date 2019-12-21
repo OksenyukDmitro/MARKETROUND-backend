@@ -1,10 +1,25 @@
 /* eslint-disable class-methods-use-this */
 import ProductModel from '../models/product';
+import CategoryModel from '../models/category';
 
 class ProductsService {
-  add({ createdBy, description, location, price, category, title }) {
-    // TODO: validate
-    return ProductModel.create({ createdBy, description, location, price, category, title });
+  async add({ creator, description, location, price, category, title }) {
+    // TODO: validate   
+
+    const ctg = await CategoryModel.findOneByQuery({ name: category.name })
+    const categoryId = ctg._id
+
+    return ProductModel.create({
+      creatorId: creator._id,
+      creator,
+      description,
+      location,
+      price,
+      category,
+      categoryId,
+      title,
+      status: "PUBLISHED"
+    });
   }
 
   find(query = {}, options) {
