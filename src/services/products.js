@@ -3,7 +3,7 @@ import ProductModel from '../models/product';
 import CategoryModel from '../models/category';
 
 class ProductsService {
-  async add({ creator, description, location, price, category, title }) {
+  async add({ creator, description, location, price, category, title, images }) {
     // TODO: validate   
 
     const ctg = await CategoryModel.findOneByQuery({ name: category.name })
@@ -18,7 +18,8 @@ class ProductsService {
       category,
       categoryId,
       title,
-      status: "PUBLISHED"
+      status: "PUBLISHED",
+      images, 
     });
   }
 

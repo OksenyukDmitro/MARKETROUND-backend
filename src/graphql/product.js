@@ -10,7 +10,8 @@ export const typeDefs = gql`
     CLOSED
   }
   extend type Query {
-    products(offset: Int!, limit: Int!, category: String, seacrhQuery: String): [Product]!
+    products(offset: Int!, limit: Int!): [Product]!
+    seacrhProducts(offset: Int!, limit: Int!, category: String, seacrhQuery: String): [Product]!
     userProducts(username: String!, offset: Int!, limit: Int!): [Product]!
     myProducts(offset: Int!, limit: Int!): [Product]!
     product(productId: ID!): Product!
@@ -41,7 +42,7 @@ export const typeDefs = gql`
     name: ID!
   }
   input ProductImageInput {
-    url: [String]!
+    url: String!
   }
 
   type Product {
@@ -72,9 +73,31 @@ export const resolvers = {
   Query: {
     products: (root, args, ctx) => {
       const { limit, offset } = args;
-      authCheck(ctx);
 
+      authCheck(ctx);
       return ProductsService.find({}, { limit, offset });
+
+    },
+    seacrhProducts: (root, args, ctx) => {
+      const { limit, offset, category, seacrhQuery } = args;
+
+      authCheck(ctx);
+      if (category && category !== "") {
+        return ProductsService.find({ category: { name: category } }, { limit, offset });
+      }
+      if (seacrhQuery && seacrhQuery !== "") {
+        return ProductsService.find({ title: { $regex: seacrhQuery, $options: "i" } }, { limit, offset });
+      }
+      if (category && category !== "" && seacrhQuery && seacrhQuery !== "") {
+        return ProductsService.find({
+          category: { name: category },
+          title: { $regex: seacrhQuery, $options: "i" }
+        }, { limit, offset });
+
+
+      }
+      return ProductsService.find({}, { limit, offset });
+
     },
     wishProducts: (root, args, ctx) => {
       const { limit, offset } = args;
@@ -101,13 +124,15 @@ export const resolvers = {
   Mutation: {
     addProduct: (root, args, ctx) => {
       authCheck(ctx);
-      const { description, title, location, price, category } = args.input;
+      const { description, title, location, price, category, images } = args.input;
+      console.log(images)
       return ProductsService.add({
         title,
         creator: ctx.user,
         description,
         location,
         price,
+        images,
         category: {
           name: category.name,
         },

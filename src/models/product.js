@@ -16,8 +16,7 @@ const ProductSchema = new mongoose.Schema(
     },
     creator: { type: 'ObjectId', ref: 'User' },
     location: {
-      type: String,
-      required: [true, 'Please enter a location'],
+      type: String,     
     },
     categoryId: {
       type: String,
@@ -37,6 +36,9 @@ const ProductSchema = new mongoose.Schema(
     status: {
       type: String,
       required: [true, 'Please enter a status'],
+    },
+    images: {
+      type: Array,     
     },
   },
   { timestamps: true },
