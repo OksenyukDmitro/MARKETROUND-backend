@@ -106,7 +106,7 @@ export const resolvers = {
       ctx.user.wish.forEach(element => {
         wish.push(ProductsService.findByProductId({ _id: element }, { limit, offset }))
       });
-      console.log(wish);
+     
       return wish;
     },
     myProducts: (root, args, ctx) => {

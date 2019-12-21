@@ -5,11 +5,23 @@ import MessageModel from '../models/message';
 
 class ChatsService {
   async create({ createdBy, productId, productOwnerId }) {
-    const chat = await ChatModel.create({ createdBy, productId, productOwnerId });
     const user = await UserModel.findUserById(createdBy);
+
+    const chat = await ChatModel.create({
+      createdBy,
+      productId,
+      product: productId,
+      interlocutor: productOwnerId,
+      productOwnerId,
+      creator: user
+    });
+    const interlocutor = await UserModel.findUserById(productOwnerId);
+
     const { _id } = chat;
     const chatsId = [_id, ...user.chatsId];
-    UserModel.update(createdBy, { chatsId });
+    const interlocutorChatsId = [_id, ...interlocutor.chatsId];
+    await UserModel.update(createdBy, { chatsId });
+    await UserModel.update(productOwnerId, { chatsId: interlocutorChatsId });
     return chat;
   }
 
@@ -23,6 +35,9 @@ class ChatsService {
 
   find(query = {}, options) {
     return ChatModel.findByQuery(query, options);
+  }
+  findOne(query = {}) {
+    return ChatModel.findOneByQuery(query);
   }
 
   findByChatId(_id, options) {

@@ -22,6 +22,7 @@ export const typeDefs = gql`
     messages: [Message]
     createdAt: String!
     createdBy: ID!
+    creator: User!
     unreadMessagesCount: Int!
     lastMessage: Message
     interlocutor: User!
@@ -63,12 +64,20 @@ export const resolvers = {
     },
     createChat: async (root, args, ctx) => {
       authCheck(ctx);
-      const { createdBy } = await ProductsService.findByProductId(args.productId);
+      const { creatorId } = await ProductsService.findByProductId(args.productId);
+      const { user } = ctx
+      if (creatorId === user._id) {
+        throw ("You cannot create chat with yourself")
+      }
+      const chat = await ChatsService.findOne({ createdBy: user._id, productId: args.productId, productOwnerId: creatorId })
 
+      if (chat) {
+        return chat;
+      }
       return ChatsService.create({
-        createdBy: ctx.user._id,
+        createdBy: user._id,
         productId: args.productId,
-        productOwnerId: createdBy,
+        productOwnerId: creatorId,
       });
     },
   },
