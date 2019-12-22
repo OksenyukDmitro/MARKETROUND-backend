@@ -25,12 +25,12 @@ class ChatsService {
     return chat;
   }
 
-  async addMessage({ chatId, body, createdBy }) {
+  async addMessage({ chatId, body, creator }) {  
+    const message = await MessageModel.create({ chatId, body, createdBy: creator._id, creator });
     const chat = await this.findByChatId(chatId);
-    const message = MessageModel.create({ chatId, body, createdBy });
-    const messages = [message, ...chat.messages];
+    const messages = [message._id, ...chat.messages];
     this.update(chatId, { messages });
-    return messages;
+    return message;
   }
 
   find(query = {}, options) {

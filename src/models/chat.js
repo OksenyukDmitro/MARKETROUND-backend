@@ -26,7 +26,10 @@ const ChatSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please enter a productOwnerId'],
     },
-    messages: [],
+    messages: [{
+      type: 'ObjectId',
+      ref: 'Message'
+    }],
     unreadMessagesCount: {
       type: Number,
       default: 0,
@@ -39,13 +42,22 @@ ChatSchema.statics.findByChatId = function findChatByChatId(chatId) {
   return this.findOne({ _id: chatId })
     .populate("product")
     .populate("interlocutor")
-    .populate("creator");
+    .populate("creator")
+    .populate({
+      path: 'messages',
+      sort: ({ 'createdAt': 'desk' }),
+      populate: { path: 'creator' }
+    });
 };
 ChatSchema.statics.findChatByProductId = function findChatByChatId(chatId, productId) {
   return this.findOne({ _id: chatId, productId })
     .populate("product")
     .populate("interlocutor")
-    .populate("creator");
+    .populate("creator")
+    .populate({
+      path: 'messages',
+      populate: { path: 'creator', component: "User" }
+    });
 };
 
 ChatSchema.statics.findByQuery = function findByQuery(query, options) {
@@ -55,13 +67,21 @@ ChatSchema.statics.findByQuery = function findByQuery(query, options) {
     .limit(options.limit || 10)
     .populate("product")
     .populate("interlocutor")
-    .populate("creator");
+    .populate("creator")
+    .populate({
+      path: 'messages',
+      populate: { path: 'creator', component: "User" }
+    });
 };
 ChatSchema.statics.findOneByQuery = function findByQuery(query) {
   return this.findOne(query)
     .populate("product")
     .populate("interlocutor")
-    .populate("creator");
+    .populate("creator")
+    .populate({
+      path: 'messages',
+      populate: { path: 'creator', component: "User" }
+    });
 };
 
 const ChatModel = mongoose.model('Chat', ChatSchema);

@@ -14,20 +14,26 @@ const MessageSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please enter a createdBy'],
     },
+    creator: {
+      type: 'ObjectId',
+      ref: 'User'
+    },
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true },
 );
 
 MessageSchema.statics.findByChatId = function findChatByChatId(chatId) {
-  return this.findOne({ _id: chatId });
+  return this.findOne({ _id: chatId })
+    .populate("creator");
 };
 
 MessageSchema.statics.findByQuery = function findByQuery(query, options) {
   return this.find(query)
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: 1 })
     .skip(options.offset)
-    .limit(options.limit || 10);
+    .limit(options.limit || 10)
+    .populate("creator");
 };
 
 const MessageModel = mongoose.model('Message', MessageSchema);

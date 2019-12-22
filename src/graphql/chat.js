@@ -41,10 +41,16 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    chat: (root, args, ctx) => {
+    chat: async (root, args, ctx) => {
       authCheck(ctx);
       const { chatId } = args;
-      return ChatsService.findByChatId(chatId);
+      const chat = await ChatsService.findByChatId(chatId);
+      if (chat) {
+        chat.messages.sort((a, b) => {
+          return a.createdAt - b.createdAt;
+        });
+      }
+      return chat;
     },
     chats: (root, args, ctx) => {
       authCheck(ctx);
@@ -57,7 +63,7 @@ export const resolvers = {
     addMessage: (root, args, ctx) => {
       authCheck(ctx);
       return ChatsService.addMessage({
-        createdBy: ctx.user._id,
+        creator: ctx.user,
         chatId: args.chatId,
         body: args.body,
       });
