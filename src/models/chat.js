@@ -8,15 +8,15 @@ const ChatSchema = new mongoose.Schema(
     },
     product: {
       type: 'ObjectId',
-      ref: 'Product'
+      ref: 'Product',
     },
     interlocutor: {
       type: 'ObjectId',
-      ref: 'User'
+      ref: 'User',
     },
     creator: {
       type: 'ObjectId',
-      ref: 'User'
+      ref: 'User',
     },
     createdBy: {
       type: String,
@@ -26,37 +26,39 @@ const ChatSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please enter a productOwnerId'],
     },
-    messages: [{
-      type: 'ObjectId',
-      ref: 'Message'
-    }],
+    messages: [
+      {
+        type: 'ObjectId',
+        ref: 'Message',
+      },
+    ],
     unreadMessagesCount: {
       type: Number,
       default: 0,
-    }
+    },
   },
   { timestamps: true },
 );
 
 ChatSchema.statics.findByChatId = function findChatByChatId(chatId) {
   return this.findOne({ _id: chatId })
-    .populate("product")
-    .populate("interlocutor")
-    .populate("creator")
+    .populate('product')
+    .populate('interlocutor')
+    .populate('creator')
     .populate({
       path: 'messages',
-      sort: ({ 'createdAt': 'desk' }),
-      populate: { path: 'creator' }
+      sort: { createdAt: 'desk' },
+      populate: { path: 'creator' },
     });
 };
 ChatSchema.statics.findChatByProductId = function findChatByChatId(chatId, productId) {
   return this.findOne({ _id: chatId, productId })
-    .populate("product")
-    .populate("interlocutor")
-    .populate("creator")
+    .populate('product')
+    .populate('interlocutor')
+    .populate('creator')
     .populate({
       path: 'messages',
-      populate: { path: 'creator', component: "User" }
+      populate: { path: 'creator', component: 'User' },
     });
 };
 
@@ -65,22 +67,22 @@ ChatSchema.statics.findByQuery = function findByQuery(query, options) {
     .sort({ createdAt: -1 })
     .skip(options.offset || 0)
     .limit(options.limit || 10)
-    .populate("product")
-    .populate("interlocutor")
-    .populate("creator")
+    .populate('product')
+    .populate('interlocutor')
+    .populate('creator')
     .populate({
       path: 'messages',
-      populate: { path: 'creator', component: "User" }
+      populate: { path: 'creator', component: 'User' },
     });
 };
 ChatSchema.statics.findOneByQuery = function findByQuery(query) {
   return this.findOne(query)
-    .populate("product")
-    .populate("interlocutor")
-    .populate("creator")
+    .populate('product')
+    .populate('interlocutor')
+    .populate('creator')
     .populate({
       path: 'messages',
-      populate: { path: 'creator', component: "User" }
+      populate: { path: 'creator', component: 'User' },
     });
 };
 

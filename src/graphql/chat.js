@@ -71,11 +71,15 @@ export const resolvers = {
     createChat: async (root, args, ctx) => {
       authCheck(ctx);
       const { creatorId } = await ProductsService.findByProductId(args.productId);
-      const { user } = ctx
-      if (creatorId === user._id) {
-        throw ("You cannot create chat with yourself")
+      const { user } = ctx;
+      if (creatorId == user._id) {
+        throw new Error('You cannot create chat with yourself');
       }
-      const chat = await ChatsService.findOne({ createdBy: user._id, productId: args.productId, productOwnerId: creatorId })
+      const chat = await ChatsService.findOne({
+        createdBy: user._id,
+        productId: args.productId,
+        productOwnerId: creatorId,
+      });
 
       if (chat) {
         return chat;

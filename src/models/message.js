@@ -16,7 +16,7 @@ const MessageSchema = new mongoose.Schema(
     },
     creator: {
       type: 'ObjectId',
-      ref: 'User'
+      ref: 'User',
     },
     createdAt: { type: Date, default: Date.now },
   },
@@ -24,8 +24,7 @@ const MessageSchema = new mongoose.Schema(
 );
 
 MessageSchema.statics.findByChatId = function findChatByChatId(chatId) {
-  return this.findOne({ _id: chatId })
-    .populate("creator");
+  return this.findOne({ _id: chatId }).populate('creator');
 };
 
 MessageSchema.statics.findByQuery = function findByQuery(query, options) {
@@ -33,7 +32,7 @@ MessageSchema.statics.findByQuery = function findByQuery(query, options) {
     .sort({ createdAt: 1 })
     .skip(options.offset)
     .limit(options.limit || 10)
-    .populate("creator");
+    .populate('creator');
 };
 
 const MessageModel = mongoose.model('Message', MessageSchema);

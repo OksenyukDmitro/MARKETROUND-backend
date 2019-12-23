@@ -13,7 +13,7 @@ class ChatsService {
       product: productId,
       interlocutor: productOwnerId,
       productOwnerId,
-      creator: user
+      creator: user,
     });
     const interlocutor = await UserModel.findUserById(productOwnerId);
 
@@ -25,7 +25,7 @@ class ChatsService {
     return chat;
   }
 
-  async addMessage({ chatId, body, creator }) {  
+  async addMessage({ chatId, body, creator }) {
     const message = await MessageModel.create({ chatId, body, createdBy: creator._id, creator });
     const chat = await this.findByChatId(chatId);
     const messages = [message._id, ...chat.messages];
@@ -36,6 +36,7 @@ class ChatsService {
   find(query = {}, options) {
     return ChatModel.findByQuery(query, options);
   }
+
   findOne(query = {}) {
     return ChatModel.findOneByQuery(query);
   }

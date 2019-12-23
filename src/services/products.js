@@ -4,10 +4,10 @@ import CategoryModel from '../models/category';
 
 class ProductsService {
   async add({ creator, description, location, price, category, title, images }) {
-    // TODO: validate   
+    // TODO: validate
 
-    const ctg = await CategoryModel.findOneByQuery({ name: category.name })
-    const categoryId = ctg._id
+    const ctg = await CategoryModel.findOneByQuery({ name: category.name });
+    const categoryId = ctg._id;
 
     return ProductModel.create({
       creatorId: creator._id,
@@ -18,8 +18,8 @@ class ProductsService {
       category,
       categoryId,
       title,
-      status: "PUBLISHED",
-      images, 
+      status: 'PUBLISHED',
+      images,
     });
   }
 
@@ -40,9 +40,9 @@ class ProductsService {
     return ProductModel.remove({ _id });
   }
 
-  update(productId, body) {
-    // TODO: validate
-    return ProductModel.update({ _id: productId }, { $set: { body } });
+  async update(productId, status) {
+    const { nModified } = await ProductModel.updateOne({ _id: productId }, { $set: { status } });
+    return nModified;
   }
 }
 

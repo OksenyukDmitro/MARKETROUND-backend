@@ -73,23 +73,24 @@ class Users {
 
   async addToWish(user, productId) {
     // TODO: validate
-    const { wish, _id } = user
+    const { wish, _id } = user;
     if (wish.includes(productId)) {
       return false;
     }
-    wish.push(productId)
+    wish.push(productId);
     await UserModel.updateOne({ _id }, { $set: { wish } });
-    return true
+    return true;
   }
+
   async removeFromWish(user, productId) {
     // TODO: validate
-    const { wish, _id } = user
+    const { wish, _id } = user;
     if (!wish.includes(productId)) {
       return false;
     }
-    const newWish = wish.filter((e) => e !== productId)
+    const newWish = wish.filter(e => e !== productId);
     await UserModel.updateOne({ _id }, { $set: { wish: newWish } });
-    return true
+    return true;
   }
 
   async changePassword(user, password, newPassword) {

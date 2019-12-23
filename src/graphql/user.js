@@ -61,7 +61,7 @@ export const typeDefs = gql`
     email: String!
     profile: UserProfile!
     chatsId: [String]
-    wish: [String]  
+    wish: [String]
   }
 
   type UserProfile {
@@ -123,11 +123,11 @@ export const resolvers = {
     },
     addToWish: async (root, args, ctx) => {
       const { productId } = args;
-      return  await AuthService.addToWish(ctx.user, productId);      
+      return await AuthService.addToWish(ctx.user, productId);
     },
     removeFromWish: async (root, args, ctx) => {
       const { productId } = args;
-      return  await AuthService.removeFromWish(ctx.user, productId);      
+      return await AuthService.removeFromWish(ctx.user, productId);
     },
     //     changePassword
     // forgotPassword

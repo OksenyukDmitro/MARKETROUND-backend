@@ -16,7 +16,7 @@ const ProductSchema = new mongoose.Schema(
     },
     creator: { type: 'ObjectId', ref: 'User' },
     location: {
-      type: String,     
+      type: String,
     },
     categoryId: {
       type: String,
@@ -28,7 +28,7 @@ const ProductSchema = new mongoose.Schema(
         required: [true, 'Please enter a category'],
       },
     },
-   
+
     price: {
       type: Number,
       required: [true, 'Please enter a price'],
@@ -38,7 +38,7 @@ const ProductSchema = new mongoose.Schema(
       required: [true, 'Please enter a status'],
     },
     images: {
-      type: Array,     
+      type: Array,
     },
   },
   { timestamps: true },

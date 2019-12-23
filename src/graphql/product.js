@@ -4,7 +4,7 @@ import ProductsService from '../services/products';
 import { authCheck } from './utils';
 
 export const typeDefs = gql`
-   enum Status {
+  enum Status {
     DRAFT
     PUBLISHED
     CLOSED
@@ -35,7 +35,6 @@ export const typeDefs = gql`
 
   input UpdateProductInput {
     productId: ID!
-    body: String!
     status: Status!
   }
   input CategoryInput {
@@ -75,34 +74,33 @@ export const resolvers = {
       const { limit, offset } = args;
 
       return ProductsService.find({}, { limit, offset });
-
     },
     seacrhProducts: (root, args) => {
       const { limit, offset, category, seacrhQuery } = args;
-
-      if (category && category !== "") {
+      if (category && category !== '' && seacrhQuery && seacrhQuery !== '') {
+        return ProductsService.find(
+          {
+            category: { name: category },
+            title: { $regex: seacrhQuery, $options: 'i' },
+          },
+          { limit, offset },
+        );
+      }
+      if (category && category !== '') {
         return ProductsService.find({ category: { name: category } }, { limit, offset });
       }
-      if (seacrhQuery && seacrhQuery !== "") {
-        return ProductsService.find({ title: { $regex: seacrhQuery, $options: "i" } }, { limit, offset });
+      if (seacrhQuery && seacrhQuery !== '') {
+        return ProductsService.find({ title: { $regex: seacrhQuery, $options: 'i' } }, { limit, offset });
       }
-      if (category && category !== "" && seacrhQuery && seacrhQuery !== "") {
-        return ProductsService.find({
-          category: { name: category },
-          title: { $regex: seacrhQuery, $options: "i" }
-        }, { limit, offset });
 
-
-      }
       return ProductsService.find({}, { limit, offset });
-
     },
     wishProducts: (root, args, ctx) => {
       const { limit, offset } = args;
       authCheck(ctx);
       const wish = [];
       ctx.user.wish.forEach(element => {
-        wish.push(ProductsService.findByProductId({ _id: element }, { limit, offset }))
+        wish.push(ProductsService.findByProductId({ _id: element }, { limit, offset }));
       });
 
       return wish;
@@ -112,7 +110,7 @@ export const resolvers = {
       const { limit, offset } = args;
       return ProductsService.findByUserId(ctx.user._id, { limit, offset });
     },
-    userProducts: (root, args, ctx) => {     
+    userProducts: (root, args) => {
       const { limit, offset, userId } = args;
       return ProductsService.findByUserId(userId, { limit, offset });
     },
@@ -126,7 +124,7 @@ export const resolvers = {
     addProduct: (root, args, ctx) => {
       authCheck(ctx);
       const { description, title, location, price, category, images } = args.input;
-      console.log(images)
+      console.log(images);
       return ProductsService.add({
         title,
         creator: ctx.user,
@@ -143,9 +141,11 @@ export const resolvers = {
       authCheck(ctx);
       return ProductsService.remove(args.postId).then(result => result.ok);
     },
-    updateProduct: (root, args, ctx) => {
+    updateProduct: async (root, args, ctx) => {
       authCheck(ctx);
-      return ProductsService.update(args.postId, args.body);
+      const { productId, status } = args.input;
+      await ProductsService.update(productId, status);
+      return ProductsService.findByProductId(productId);
     },
   },
   // TODO: implement
