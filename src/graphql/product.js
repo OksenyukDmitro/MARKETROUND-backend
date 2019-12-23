@@ -12,7 +12,7 @@ export const typeDefs = gql`
   extend type Query {
     products(offset: Int!, limit: Int!): [Product]!
     seacrhProducts(offset: Int!, limit: Int!, category: String, seacrhQuery: String): [Product]!
-    userProducts(username: String!, offset: Int!, limit: Int!): [Product]!
+    userProducts(userId: String!, offset: Int!, limit: Int!): [Product]!
     myProducts(offset: Int!, limit: Int!): [Product]!
     product(productId: ID!): Product!
     wishProducts(offset: Int!, limit: Int!): [Product]!
@@ -27,7 +27,7 @@ export const typeDefs = gql`
   input CreateProductInput {
     title: String!
     description: String!
-    location: String!
+    location: String
     price: Float!
     category: CategoryInput!
     images: [ProductImageInput]
@@ -71,17 +71,15 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    products: (root, args, ctx) => {
+    products: (root, args) => {
       const { limit, offset } = args;
 
-      authCheck(ctx);
       return ProductsService.find({}, { limit, offset });
 
     },
-    seacrhProducts: (root, args, ctx) => {
+    seacrhProducts: (root, args) => {
       const { limit, offset, category, seacrhQuery } = args;
 
-      authCheck(ctx);
       if (category && category !== "") {
         return ProductsService.find({ category: { name: category } }, { limit, offset });
       }
@@ -106,7 +104,7 @@ export const resolvers = {
       ctx.user.wish.forEach(element => {
         wish.push(ProductsService.findByProductId({ _id: element }, { limit, offset }))
       });
-     
+
       return wish;
     },
     myProducts: (root, args, ctx) => {
@@ -114,8 +112,11 @@ export const resolvers = {
       const { limit, offset } = args;
       return ProductsService.findByUserId(ctx.user._id, { limit, offset });
     },
-    product: async (root, args, ctx) => {
-      authCheck(ctx);
+    userProducts: (root, args, ctx) => {     
+      const { limit, offset, userId } = args;
+      return ProductsService.findByUserId(userId, { limit, offset });
+    },
+    product: async (root, args) => {
       const { productId } = args;
       const product = await ProductsService.findByProductId(productId);
       return product;
