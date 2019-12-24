@@ -14,7 +14,7 @@ export const typeDefs = gql`
     login(input: LoginInput!): TokenAndUser!
     logout: Boolean
     changePassword(input: ChangePasswordInput!): Boolean
-    forgotPassword(username: String!): Boolean
+    forgotPassword(username: String!, email: String!, newPassword: String!): Boolean
     addToWish(productId: String!): Boolean
     removeFromWish(productId: String!): Boolean
   }
@@ -121,13 +121,31 @@ export const resolvers = {
       if (nModified > 0) return true;
       return false;
     },
+    forgotPassword: async (root, args) => {
+      const { username, email, newPassword } = args;
+      const user = await AuthService.findUserByUsername(username);
+
+      if (!user) {
+        throw new Error('Username is not found');
+      }
+
+      if (user.email !== email) {
+        throw new Error('Email does not match');
+      }
+
+      const { nModified } = await AuthService.changeForgotPassword(user, newPassword);
+      if (nModified > 0) return true;
+      return false;
+    },
     addToWish: async (root, args, ctx) => {
       const { productId } = args;
-      return await AuthService.addToWish(ctx.user, productId);
+      const result = await AuthService.addToWish(ctx.user, productId);
+      return result;
     },
     removeFromWish: async (root, args, ctx) => {
       const { productId } = args;
-      return await AuthService.removeFromWish(ctx.user, productId);
+      const result = await AuthService.removeFromWish(ctx.user, productId);
+      return result;
     },
     //     changePassword
     // forgotPassword

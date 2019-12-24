@@ -124,7 +124,6 @@ export const resolvers = {
     addProduct: (root, args, ctx) => {
       authCheck(ctx);
       const { description, title, location, price, category, images } = args.input;
-      console.log(images);
       return ProductsService.add({
         title,
         creator: ctx.user,

@@ -106,6 +106,16 @@ class Users {
     return result;
   }
 
+  async changeForgotPassword(user, newPassword) {
+    const { _id } = user;
+    const exists = !!UserModel.findById(_id);
+    if (!exists) {
+      throw new Error('User not found!');
+    }
+    const result = await UserModel.updateOne({ _id }, { $set: { password: encrypt(newPassword) } });
+    return result;
+  }
+
   async addAccessTokenToUser(user) {
     const accessToken = generateAccessToken();
 
