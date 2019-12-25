@@ -29,7 +29,7 @@ class ChatsService {
     const message = await MessageModel.create({ chatId, body, createdBy: creator._id, creator });
     const chat = await this.findByChatId(chatId);
     const messages = [message._id, ...chat.messages];
-    this.update(chatId, { messages });
+    this.update(chatId, { messages, lastMessage: message._id });
     return message;
   }
 

@@ -32,6 +32,10 @@ const ChatSchema = new mongoose.Schema(
         ref: 'Message',
       },
     ],
+    lastMessage: {
+      type: 'ObjectId',
+      ref: 'Message',
+    },
     unreadMessagesCount: {
       type: Number,
       default: 0,
@@ -45,6 +49,7 @@ ChatSchema.statics.findByChatId = function findChatByChatId(chatId) {
     .populate('product')
     .populate('interlocutor')
     .populate('creator')
+    .populate('lastMessage')
     .populate({
       path: 'messages',
       sort: { createdAt: 'desk' },
@@ -56,6 +61,7 @@ ChatSchema.statics.findChatByProductId = function findChatByChatId(chatId, produ
     .populate('product')
     .populate('interlocutor')
     .populate('creator')
+    .populate('lastMessage')
     .populate({
       path: 'messages',
       populate: { path: 'creator', component: 'User' },
@@ -70,6 +76,7 @@ ChatSchema.statics.findByQuery = function findByQuery(query, options) {
     .populate('product')
     .populate('interlocutor')
     .populate('creator')
+    .populate('lastMessage')
     .populate({
       path: 'messages',
       populate: { path: 'creator', component: 'User' },
@@ -80,6 +87,7 @@ ChatSchema.statics.findOneByQuery = function findByQuery(query) {
     .populate('product')
     .populate('interlocutor')
     .populate('creator')
+    .populate('lastMessage')
     .populate({
       path: 'messages',
       populate: { path: 'creator', component: 'User' },
