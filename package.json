@@ -26,7 +26,7 @@
     "faker": "^4.1.0",
     "git-cz": "^3.3.0",
     "graphql": "14.5.8",
-    "lodash": "4.17.15",
+    "lodash": "4.17.21",
     "md5": "^2.2.1",
     "mongoose": "^5.7.8",
     "mongoose-beautiful-unique-validation": "^7.1.1",
