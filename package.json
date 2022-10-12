@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "2.9.7",
+    "apollo-server": "2.25.4",
     "dotenv": "8.2.0",
     "faker": "^4.1.0",
     "git-cz": "^3.3.0",
